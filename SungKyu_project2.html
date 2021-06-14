@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <title>Project 2</title>
+    <script language="JavaScript" type="text/JavaScript">
+        // define global arrays and variables
+        let videoArray = [];
+        let hardDiskArray = [];
+        let SSDArray = [];
+        let counterVideo = 0;
+        let counterHardDisk = 0;
+        let counterSSD = 0;
+
+        // create base class (Device) with corresponding properties, methods and getter method
+		class Device {
+			constructor(status, replcost, suppname, serinum) {
+                this._status = status;
+                this._replcost = replcost;
+			    this._suppname = suppname;
+			    this._serinum = serinum;
+            }
+                
+			enable() {
+                this._status = 1;
+			    return this._status;
+            }
+                
+            disable() {
+                this._status = 0;
+			    return this._status;
+            }
+                
+            get status() {
+			    return this._status;
+			}
+		}
+
+        // create derived class (VideoDevice) with corresponding properties, methods and getter method
+		class VideoDevice extends Device {
+			constructor(status, replcost, suppname, serinum, resolution, type) {
+			    super(status, replcost, suppname, serinum);
+                this._resolution = resolution;
+                this._type = type;
+            }
+            
+            enable() {
+			    return super.enable();
+            }
+                
+            disable() {
+			    return super.disable();
+            }
+                
+            get status() {
+			    return this._status;
+			}
+        }
+        
+        // create derived class (DiskDevice) with corresponding properties, methods and getter method
+        class DiskDevice extends Device {
+			constructor(status, replcost, suppname, serinum, size, tranrate) {
+			    super(status, replcost, suppname, serinum);
+                this._size = size;
+                this._tranrate = tranrate;
+            }
+            
+            enable() {
+			    return super.enable();
+            }
+                
+            disable() {
+			    return super.disable();
+            }
+                
+            get status() {
+			    return this._status;
+			}
+        }
+
+        // create derived class (HardDisk) with corresponding properties, methods and getter method
+        class HardDisk extends DiskDevice {
+			constructor(status, replcost, suppname, serinum, size, tranrate, platsize, numofplat) {
+				super(status, replcost, suppname, serinum, size, tranrate);
+                this._platsize = platsize;
+                this._numofplat = numofplat;
+            }
+            
+            enable() {
+			    return super.enable();
+            }
+                
+            disable() {
+			    return super.disable();
+            }
+                
+            get status() {
+			    return this._status;
+			}
+        }
+        
+        // create derived class (SSDClass) with corresponding properties, methods and getter method
+        class SSDClass extends DiskDevice {
+			constructor(status, replcost, suppname, serinum, size, tranrate, type, wearlevel) {
+			    super(status, replcost, suppname, serinum, size, tranrate);
+                this._type = type;
+                this._wearlevel = wearlevel;
+            }
+            
+            enable() {
+			    return super.enable();
+            }
+                
+            disable() {
+			    return super.disable();
+            }
+                
+            get status() {
+			    return this._status;
+			}
+        }
+
+        // create new object of the specific type
+        function addNew(device) {
+            if (device === 'video') {
+                let status = document.getElementById("statusVideo").checked;
+                let replCost = document.getElementById("replCostVideo").value;
+                let suppName = document.getElementById("suppNameVideo").value;
+                let seriNum = document.getElementById("seriNumVideo").value;
+                let resolution = document.getElementById("resolutionVideo").value;
+                let type = document.getElementById("typeVideo").value;
+
+                videoArray.push(new VideoDevice(status, replCost, suppName, seriNum, resolution, type));
+                if (videoArray.length > 1) {
+                    counterVideo++;
+                }
+            }
+
+            else if (device === 'hardDisk') {
+                let status = document.getElementById("statusHardDisk").checked;
+                let replCost = document.getElementById("replCostHardDisk").value;
+                let suppName = document.getElementById("suppNameHardDisk").value;
+                let seriNum = document.getElementById("seriNumHardDisk").value;
+                let size = document.getElementById("sizeHardDisk").value;
+                let tranRate = document.getElementById("tranRateHardDisk").value;
+                let platSize = document.getElementById("platSizeHardDisk").value;
+                let numOfPlat = document.getElementById("numOfPlatHardDisk").value;
+
+                hardDiskArray.push(new HardDisk(status, replCost, suppName, seriNum, size, tranRate, platSize, numOfPlat));
+                if (hardDiskArray.length > 1) {
+                    counterHardDisk++;
+                }
+            }
+
+            else if (device === 'SSD') {
+                let status = document.getElementById("statusSSD").checked;
+                let replCost = document.getElementById("replCostSSD").value;
+                let suppName = document.getElementById("suppNameSSD").value;
+                let seriNum = document.getElementById("seriNumSSD").value;
+                let size = document.getElementById("sizeSSD").value;
+                let tranRate = document.getElementById("tranRateSSD").value;
+                let type = document.getElementById("typeSSD").value;
+                let wearLevel = document.getElementById("wearLevelSSD").checked;
+
+                SSDArray.push(new SSDClass(status, replCost, suppName, seriNum, size, tranRate, type, wearLevel));
+                if (SSDArray.length > 1) {
+                    counterSSD++;
+                }
+            }
+        }
+
+        // switch to the next device and edit (or view) its properties
+        function next(device) {
+            if (device === 'video') {
+                if (counterVideo === (videoArray.length - 1)) {
+                    alert("This is the last item of the array.");
+                }
+                else {
+                    counterVideo++;
+
+                    document.getElementById("statusVideo").checked = videoArray[counterVideo]._status;
+                    document.getElementById("replCostVideo").value = videoArray[counterVideo]._replcost;
+                    document.getElementById("suppNameVideo").value = videoArray[counterVideo]._suppname;
+                    document.getElementById("seriNumVideo").value = videoArray[counterVideo]._serinum;
+                    document.getElementById("resolutionVideo").value = videoArray[counterVideo]._resolution;
+                    document.getElementById("typeVideo").value = videoArray[counterVideo]._type;
+                }
+            }
+
+            else if (device === 'hardDisk') {
+                if (counterHardDisk === (hardDiskArray.length - 1)) {
+                    alert("This is the last item of the array.");
+                }
+                else {
+                    counterHardDisk++;
+
+                    document.getElementById("statusHardDisk").checked = hardDiskArray[counterHardDisk]._status;
+                    document.getElementById("replCostHardDisk").value = hardDiskArray[counterHardDisk]._replcost;
+                    document.getElementById("suppNameHardDisk").value = hardDiskArray[counterHardDisk]._suppname;
+                    document.getElementById("seriNumHardDisk").value = hardDiskArray[counterHardDisk]._serinum;
+                    document.getElementById("sizeHardDisk").value = hardDiskArray[counterHardDisk]._size;
+                    document.getElementById("tranRateHardDisk").value = hardDiskArray[counterHardDisk]._tranrate;
+                    document.getElementById("platSizeHardDisk").value = hardDiskArray[counterHardDisk]._platsize;
+                    document.getElementById("numOfPlatHardDisk").value = hardDiskArray[counterHardDisk]._numofplat;
+                }
+            }
+
+            else if (device === 'SSD') {
+                if (counterSSD === (SSDArray.length - 1)) {
+                    alert("This is the last item of the array.");
+                }
+                else {
+                    counterSSD++;
+
+                    document.getElementById("statusSSD").checked = SSDArray[counterSSD]._status;
+                    document.getElementById("replCostSSD").value = SSDArray[counterSSD]._replcost;
+                    document.getElementById("suppNameSSD").value = SSDArray[counterSSD]._suppname;
+                    document.getElementById("seriNumSSD").value = SSDArray[counterSSD]._serinum;
+                    document.getElementById("sizeSSD").value = SSDArray[counterSSD]._size;
+                    document.getElementById("tranRateSSD").value = SSDArray[counterSSD]._tranrate;
+                    document.getElementById("typeSSD").value = SSDArray[counterSSD]._type;
+                    document.getElementById("wearLevelSSD").checked = SSDArray[counterSSD]._wearlevel;
+                }
+            }
+        }
+
+        // switch to the previous device and edit (or view) its properties
+        function previous(device) {
+            if (device === 'video') {
+                if (counterVideo === 0) {
+                    alert("This is the first item of the array.");
+                }    
+                else {
+                    counterVideo--;
+
+                    document.getElementById("statusVideo").checked = videoArray[counterVideo]._status;
+                    document.getElementById("replCostVideo").value = videoArray[counterVideo]._replcost;
+                    document.getElementById("suppNameVideo").value = videoArray[counterVideo]._suppname;
+                    document.getElementById("seriNumVideo").value = videoArray[counterVideo]._serinum;
+                    document.getElementById("resolutionVideo").value = videoArray[counterVideo]._resolution;
+                    document.getElementById("typeVideo").value = videoArray[counterVideo]._type;
+                }
+            }
+
+            else if (device === 'hardDisk') {
+                if (counterHardDisk === 0) {
+                    alert("This is the first item of the array.");
+                }    
+                else {
+                    counterHardDisk--;
+
+                    document.getElementById("statusHardDisk").checked = hardDiskArray[counterHardDisk]._status;
+                    document.getElementById("replCostHardDisk").value = hardDiskArray[counterHardDisk]._replcost;
+                    document.getElementById("suppNameHardDisk").value = hardDiskArray[counterHardDisk]._suppname;
+                    document.getElementById("seriNumHardDisk").value = hardDiskArray[counterHardDisk]._serinum;
+                    document.getElementById("sizeHardDisk").value = hardDiskArray[counterHardDisk]._size;
+                    document.getElementById("tranRateHardDisk").value = hardDiskArray[counterHardDisk]._tranrate;
+                    document.getElementById("platSizeHardDisk").value = hardDiskArray[counterHardDisk]._platsize;
+                    document.getElementById("numOfPlatHardDisk").value = hardDiskArray[counterHardDisk]._numofplat;
+                }
+            }
+
+            else if (device === 'SSD') {
+                if (counterSSD === 0) {
+                    alert("This is the first item of the array.");
+                }    
+                else {
+                    counterSSD--;
+
+                    document.getElementById("statusSSD").checked = SSDArray[counterSSD]._status;
+                    document.getElementById("replCostSSD").value = SSDArray[counterSSD]._replcost;
+                    document.getElementById("suppNameSSD").value = SSDArray[counterSSD]._suppname;
+                    document.getElementById("seriNumSSD").value = SSDArray[counterSSD]._serinum;
+                    document.getElementById("sizeSSD").value = SSDArray[counterSSD]._size;
+                    document.getElementById("tranRateSSD").value = SSDArray[counterSSD]._tranrate;
+                    document.getElementById("typeSSD").value = SSDArray[counterSSD]._type;
+                    document.getElementById("wearLevelSSD").checked = SSDArray[counterSSD]._wearlevel;
+                }
+            }
+        }
+
+        // update all properties for the currently visible device object
+        function update(device) {
+            if (device === 'video') {
+                let status = document.getElementById("statusVideo").checked;
+                let replCost = document.getElementById("replCostVideo").value;
+                let suppName = document.getElementById("suppNameVideo").value;
+                let seriNum = document.getElementById("seriNumVideo").value;
+                let resolution = document.getElementById("resolutionVideo").value;
+                let type = document.getElementById("typeVideo").value;
+                
+                videoArray[counterVideo]._status = status;
+                videoArray[counterVideo]._replcost = replCost;
+                videoArray[counterVideo]._suppname = suppName;
+                videoArray[counterVideo]._serinum = seriNum;
+                videoArray[counterVideo]._resolution = resolution;
+                videoArray[counterVideo]._type = type;
+            }
+
+            else if (device === 'hardDisk') {
+                let status = document.getElementById("statusHardDisk").checked;
+                let replCost = document.getElementById("replCostHardDisk").value;
+                let suppName = document.getElementById("suppNameHardDisk").value;
+                let seriNum = document.getElementById("seriNumHardDisk").value;
+                let size = document.getElementById("sizeHardDisk").value;
+                let tranRate = document.getElementById("tranRateHardDisk").value;
+                let platSize = document.getElementById("platSizeHardDisk").value;
+                let numOfPlat = document.getElementById("numOfPlatHardDisk").value;
+                
+                hardDiskArray[counterHardDisk]._status = status;
+                hardDiskArray[counterHardDisk]._replcost = replCost;
+                hardDiskArray[counterHardDisk]._suppname = suppName;
+                hardDiskArray[counterHardDisk]._serinum = seriNum;
+                hardDiskArray[counterHardDisk]._size = size;
+                hardDiskArray[counterHardDisk]._tranrate = tranRate;
+                hardDiskArray[counterHardDisk]._platsize = platSize;
+                hardDiskArray[counterHardDisk]._numofplat = numOfPlat;
+            }
+
+            else if (device === 'SSD') {
+                let status = document.getElementById("statusSSD").checked;
+                let replCost = document.getElementById("replCostSSD").value;
+                let suppName = document.getElementById("suppNameSSD").value;
+                let seriNum = document.getElementById("seriNumSSD").value;
+                let size = document.getElementById("sizeSSD").value;
+                let tranRate = document.getElementById("tranRateSSD").value;
+                let type = document.getElementById("typeSSD").value;
+                let wearLevel = document.getElementById("wearLevelSSD").checked;
+                
+                SSDArray[counterSSD]._status = status;
+                SSDArray[counterSSD]._replcost = replCost;
+                SSDArray[counterSSD]._suppname = suppName;
+                SSDArray[counterSSD]._serinum = seriNum;
+                SSDArray[counterSSD]._size = size;
+                SSDArray[counterSSD]._tranrate = tranRate;
+                SSDArray[counterSSD]._type = type;
+                SSDArray[counterSSD]._wearlevel = wearLevel;
+            }
+        }
+    </script>
+  </head>
+  <body>
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Video Device</h2>
+                    <div class="card-text" id="video">
+                        <div class="form-group form-check">
+                            <input type="checkbox" class="form-check-input" id="statusVideo">
+                            <label class="form-check-label" for="exampleCheck1">Status (On/Off)</label>
+                        </div>
+                        Replacement Cost ($)
+                        <input type="text" id="replCostVideo" maxlength="40" size="40">
+                        Supplier Name
+                        <input type="text" id="suppNameVideo" maxlength="40" size="40">
+                        Serial Number
+                        <input type="text" id="seriNumVideo" maxlength="40" size="40">
+                        Resolution
+                        <input type="text" id="resolutionVideo" maxlength="40" size="40">
+                        <div class="form-group">
+                            <label for="exampleFormControlSelect1">Type</label>
+                            <select class="form-control" id="typeVideo">
+                                <option>LCD</option>
+                                <option>LED</option>
+                                <option>Plasma</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br><br><br><br><br>
+                    <button type="button" class="btn btn-primary" onclick="previous('video');">Previous</button>
+                    <button type="button" class="btn btn-primary" onclick="next('video');">Next</button>
+                    <button type="button" class="btn btn-success" onclick="addNew('video');">New</button>
+                    <button type="button" class="btn btn-info" onclick="update('video');">Update</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Hard Disk</h2>
+                    <div class="card-text" id="hardDisk">
+                        <div class="form-group form-check">
+                            <input type="checkbox" class="form-check-input" id="statusHardDisk">
+                            <label class="form-check-label" for="exampleCheck1">Status (On/Off)</label>
+                        </div>
+                        Replacement Cost ($)
+                        <input type="text" id="replCostHardDisk" maxlength="40" size="40">
+                        Supplier Name
+                        <input type="text" id="suppNameHardDisk" maxlength="40" size="40">
+                        Serial Number
+                        <input type="text" id="seriNumHardDisk" maxlength="40" size="40">
+                        Size
+                        <input type="text" id="sizeHardDisk" maxlength="40" size="40">
+                        Transfer Rate
+                        <input type="text" id="tranRateHardDisk" maxlength="40" size="40">
+                        Platter Size
+                        <input type="text" id="platSizeHardDisk" maxlength="40" size="40">
+                        Number of Platters
+                        <input type="text" id="numOfPlatHardDisk" maxlength="40" size="40">
+                    </div>
+                    <br><br>
+                    <button type="button" class="btn btn-primary" onclick="previous('hardDisk');">Previous</button>
+                    <button type="button" class="btn btn-primary" onclick="next('hardDisk');">Next</button>
+                    <button type="button" class="btn btn-success" onclick="addNew('hardDisk');">New</button>
+                    <button type="button" class="btn btn-info" onclick="update('hardDisk');">Update</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">SSD</h2>
+                    <div class="card-text" id="SSD">
+                        <div class="form-group form-check">
+                            <input type="checkbox" class="form-check-input" id="statusSSD">
+                            <label class="form-check-label" for="exampleCheck1">Status (On/Off)</label>
+                        </div>
+                        Replacement Cost ($)
+                        <input type="text" id="replCostSSD" maxlength="40" size="40">
+                        Supplier Name
+                        <input type="text" id="suppNameSSD" maxlength="40" size="40">
+                        Serial Number
+                        <input type="text" id="seriNumSSD" maxlength="40" size="40">
+                        Size
+                        <input type="text" id="sizeSSD" maxlength="40" size="40">
+                        Transfer Rate
+                        <input type="text" id="tranRateSSD" maxlength="40" size="40">
+                        <div class="form-group">
+                            <label for="exampleFormControlSelect1">Type</label>
+                            <select class="form-control" id="typeSSD">
+                                <option>Flash</option>
+                                <option>DRAM</option>
+                            </select>
+                        </div>
+                        <div class="form-group form-check">
+                            <input type="checkbox" class="form-check-input" id="wearLevelSSD">
+                            <label class="form-check-label" for="exampleCheck1">Wear Leveling</label>
+                        </div>
+                    </div>
+                    <br>
+                    <button type="button" class="btn btn-primary" onclick="previous('SSD');">Previous</button>
+                    <button type="button" class="btn btn-primary" onclick="next('SSD');">Next</button>
+                    <button type="button" class="btn btn-success" onclick="addNew('SSD');">New</button>
+                    <button type="button" class="btn btn-info" onclick="update('SSD');">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  </body>
+</html>
